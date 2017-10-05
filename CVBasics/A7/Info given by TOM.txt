@@ -1,0 +1,36 @@
+	
+Some questions have arisen concerning the oriented bar filter, and it is somewhat confusing.
+
+The a,b,c,d are supposed to give the directions for the sigma1 and sigma2, so (1,0,0,-1) just says the first sigma1 is wrt to the x-axis and the sigma2 is wrt the -y axis.  The sigmas of 2 and 1 make the fin shape. 
+The xmin,xmax,ymin,ymax just set the scale of the filter: try [-3,3] for both or [-5,5]. 
+
+To get the other orientations, I suggested that you just use imrotate: 
+
+  B = CS5320_bar(1,0,0,-1); 
+  B45 = imrotate(B,45,'crop');
+  
+  
+  
+  	
+I think I've said this several times in class, but here are some things to do when writing requested functions:
+ 
+  * follow the specification in the header (e.g., for input/output args and for their types)
+  * do not read or load files from inside a function
+  * do not plot or write from inside a function (unless that's part of its definition)
+  * functions are to be runnable as given in the calling sequence in the header
+  * when handin in your files, submit all files required to run the functions.
+  
+  
+  
+  
+  We will be using the function located at:
+https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=8&ved=0ahUKEwjn_NHXtKLLAhUY2mMKHZqUDe4QFghRMAc&url=http%3A%2F%2Fwww.wisdom.weizmann.ac.il%2F~vision%2Fcourses%2F2004_2%2Ffiles%2Fmean_shift%2Fmean_shift.ppt&usg=AFQjCNFPahgwwSlb1996Ti69kGAru4SuLw&cad=rja
+
+
+A6 issues
+High-level: Look at p. 171, it describes in Figure 6.7 what you need to do for each texture feature (it shows 2 of the bar filters).  So, implement Alg. 6.1 (texture_params), and then implement the "Build a Dictionary" part of Alg. 6.2 (kmeans_texture). For the latter, you don't need to implement a kmeans algorithm; you need to implement a function that takes a texture parameter image and runs it through the Matlab kmeans function.
+Also, when calling the oriented Gaussian function, it will return a large window - that must be reduced (imresize) to a say 11x11.  If you look at the parameter feature images, you can see if the response is at the correct scale for the textures.
+  
+  
+  
+  

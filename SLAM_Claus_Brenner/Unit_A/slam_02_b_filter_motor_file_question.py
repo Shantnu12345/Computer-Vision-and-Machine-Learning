@@ -21,7 +21,9 @@ def filter_step(old_pose, motor_ticks, ticks_to_mm, robot_width,
         # --->>> Use your previous implementation.
         # Think about if you need to modify your old code due to the
         # scanner displacement?
-        
+        x=old_pose[0]+motor_ticks[0]*ticks_to_mm*cos(old_pose[2])
+        y=old_pose[1]+motor_ticks[0]*ticks_to_mm*sin(old_pose[2])
+        theta=old_pose[2]
         return (x, y, theta)
 
     else:
@@ -32,6 +34,18 @@ def filter_step(old_pose, motor_ticks, ticks_to_mm, robot_width,
         #   old pose is the LiDAR's pose, not the robot's center pose).
         # Second, execute your old code, which implements the motion model
         #   for the center of the robot.
+        l = motor_ticks[0]*ticks_to_mm
+        r = motor_ticks[1]*ticks_to_mm
+        alpha = (r-l)/robot_width
+        R = l/alpha
+        
+        cx = old_pose[0]-(R+robot_width/2)*sin(old_pose[2])
+        cy = old_pose[1]-(R+robot_width/2)*-cos(old_pose[2])
+        thetadash = (old_pose[2]+alpha)%(2*pi)
+        
+        x=cx+(R+robot_width/2)*sin(thetadash)
+        y=cy+(R+robot_width/2)*-cos(thetadash)
+        theta=thetadash
         # Third, modify the result to get back the LiDAR pose from
         #   your computed center. This is the value you have to return.
 

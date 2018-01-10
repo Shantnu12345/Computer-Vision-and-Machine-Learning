@@ -23,11 +23,42 @@ def compute_derivative(scan, min_dist):
 # For each area between a left falling edge and a right rising edge,
 # determine the average ray number and the average depth.
 def find_cylinders(scan, scan_derivative, jump, min_dist):
+    # --->>> Insert here your previous solution from find_cylinders_question.py.
     cylinder_list = []
     on_cylinder = False
     sum_ray, sum_depth, rays = 0.0, 0.0, 0
 
-    # --->>> Insert here your previous solution from find_cylinders_question.py.
+    for i in xrange(len(scan_derivative)):
+        # --->>> Insert your cylinder code here.
+        # Whenever you find a cylinder, add a tuple
+        # (average_ray, average_depth) to the cylinder_list.
+
+        # Just for fun, I'll output some cylinders.
+        # Replace this by your code.
+        if scan_derivative[i]<-jump:
+            on_cylinder=True
+            sum_ray, sum_depth, rays = 0.0, 0.0, 0
+            #print i
+            continue
+
+        if scan_derivative[i]>jump:
+#            if rays==0:
+#                print i
+#                plot(scan)
+#                show()
+            if on_cylinder==False:
+                continue
+            on_cylinder=False
+            cylinder_list.append((sum_ray/rays,sum_depth/rays))
+            
+        
+        if on_cylinder==True:          
+            if scan_derivative[i]<-jump:
+                sum_ray, sum_depth, rays = 0.0, 0.0, 0
+                continue
+            rays+=1
+            sum_ray+=i
+            sum_depth+=scan[i]
 
     return cylinder_list
 
@@ -37,8 +68,11 @@ def compute_cartesian_coordinates(cylinders, cylinder_offset):
         # --->>> Insert here the conversion from polar to Cartesian coordinates.
         # c is a tuple (beam_index, range).
         # For converting the beam index to an angle, use
-        # LegoLogfile.beam_index_to_angle(beam_index)
-        result.append( (0,0) ) # Replace this by your (x,y)
+        beam_index=c[0]
+        ran=c[1]+cylinder_offset
+        angle = LegoLogfile.beam_index_to_angle(beam_index)
+        
+        result.append( (ran*cos(angle),ran*sin(angle)) ) # Replace this by your (x,y)
     return result
         
 
@@ -60,6 +94,7 @@ if __name__ == '__main__':
     out_file = file("cylinders.txt", "w")
     for scan in logfile.scan_data:
         # Find cylinders.
+        
         der = compute_derivative(scan, minimum_valid_distance)
         cylinders = find_cylinders(scan, der, depth_jump,
                                    minimum_valid_distance)

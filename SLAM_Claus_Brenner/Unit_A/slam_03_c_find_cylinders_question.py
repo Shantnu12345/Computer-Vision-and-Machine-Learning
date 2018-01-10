@@ -32,8 +32,26 @@ def find_cylinders(scan, scan_derivative, jump, min_dist):
 
         # Just for fun, I'll output some cylinders.
         # Replace this by your code.
-        if i % 100 == 0:
-            cylinder_list.append( (i, scan[i]) )
+        if scan_derivative[i]<-jump:
+            on_cylinder=True
+            sum_ray, sum_depth, rays = 0.0, 0.0, 0
+            continue
+
+        if scan_derivative[i]>jump:
+            if on_cylinder==False:
+                continue
+            on_cylinder=False
+            cylinder_list.append((sum_ray/rays,sum_depth/rays))
+            
+        
+        if on_cylinder==True:
+            print i
+            if scan_derivative[i]<-jump:
+                sum_ray, sum_depth, rays = 0.0, 0.0, 0
+                continue
+            rays+=1
+            sum_ray+=i
+            sum_depth+=scan[i]
 
     return cylinder_list
 
@@ -48,7 +66,7 @@ if __name__ == '__main__':
     logfile.read("robot4_scan.txt")
 
     # Pick one scan.
-    scan = logfile.scan_data[8]
+    scan = logfile.scan_data[24]
 
     # Find cylinders.
     der = compute_derivative(scan, minimum_valid_distance)

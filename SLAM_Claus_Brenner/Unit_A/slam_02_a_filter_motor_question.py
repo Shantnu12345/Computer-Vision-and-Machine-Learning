@@ -28,7 +28,7 @@ def filter_step(old_pose, motor_ticks, ticks_to_mm, robot_width):
         
         cx = old_pose[0]-(R+robot_width/2)*sin(old_pose[2])
         cy = old_pose[1]-(R+robot_width/2)*-cos(old_pose[2])
-        thetadash = (old_pose[2]+alpha)
+        thetadash = (old_pose[2]+alpha)%(2*pi)
         
         x=cx+(R+robot_width/2)*sin(thetadash)
         y=cy+(R+robot_width/2)*-cos(thetadash)
@@ -59,5 +59,5 @@ if __name__ == '__main__':
     # Draw result.
     for pose in filtered:
         print pose
-        plot([p[0] for p in filtered], [p[1] for p in filtered], 'bo')
+        plot([p[0] for p in filtered], [p[1] for p in filtered], 'b.-')
     show()

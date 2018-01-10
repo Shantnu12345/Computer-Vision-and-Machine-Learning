@@ -11,8 +11,14 @@ def compute_derivative(scan, min_dist):
         # --->>> Insert your code here.
         # Compute derivative using formula "(f(i+1) - f(i-1)) / 2".
         # Do not use erroneous scan values, which are below min_dist.
-        jumps.append(i%20 * 10) # Replace this line, append derivative instead.
-
+        
+        l = scan[i-1]
+        r = scan[i+1]
+        if(l>20 and r>20):
+            gradient = (r-l)/2
+        else:
+            gradient=0
+        jumps.append(gradient)
     jumps.append(0)
     return jumps
 
@@ -26,12 +32,12 @@ if __name__ == '__main__':
     logfile.read("robot4_scan.txt")
 
     # Pick one scan.
-    scan_no = 7
+    scan_no = 2
     scan = logfile.scan_data[scan_no]
 
     # Compute derivative, (-1, 0, 1) mask.
     der = compute_derivative(scan, minimum_valid_distance)
-
+    print der
     # Plot scan and derivative.
     title("Plot of scan %d" % scan_no)
     plot(scan)
